@@ -19,6 +19,7 @@
 //get inputs into an array and use foreach to do calculations
 
 let arrayOfInputs = [];
+// [123,"+"]
 
 // if input is a number then add it to the farray or concat with last element if that is a number
 // if input is an operator then do then add it to the array and wait for input of numbers
@@ -28,9 +29,17 @@ let arrayOfInputs = [];
 function updateOnArrayChange() {
     let displayText = document.getElementById("display-text");
     let displaySubText = document.getElementById("display-sub-text");
-    array.forEach(element => {
-        
-    });
+    if (arrayOfInputs.length === 1) {
+        displaySubText.textContent = arrayOfInputs[0].toString();
+        displayText.textContent = arrayOfInputs[0].toString();
+    } else {
+        displaySubText.textContent = arrayOfInputs[0].toString().concat(arrayOfInputs[1].toString());
+        if (arrayOfInputs.length === 3) {
+            displayText.textContent = arrayOfInputs[2].toString();
+        } else {
+            displayText.textContent = "";
+        }
+    }
 }
 
 //event listener
@@ -41,60 +50,89 @@ buttons.addEventListener("click",(e)=>{
     let button = e.target.id;
     switch (button) {
         case "all-clear":
-            arrayOfInputs = [];
+            arrayOfInputs = [0];
+            updateOnArrayChange();
             break;
         case "delete":
-            
+            deleteLastInput();
             break;
         case "divide":
-            arrayOfInputs.push["/"];
+
             break;
         case "multiply":
-            arrayOfInputs.push["*"];
+            
             break;
         case "add":
-            arrayOfInputs.push["+"];
+            
             break;
         case "subtract":
-            arrayOfInputs.push["-"];
+            
             break;
         case "equal-to":
             
             break;
         case "period":
-            arrayOfInputs.push["."];
+            
             break;
         case "0":
-            arrayOfInputs.push[0];
+            inputNumber(0);
             break;
         case "1":
-            arrayOfInputs.push[1];
+            inputNumber(1);
             break;
         case "2":
-            arrayOfInputs.push[2];
+            inputNumber(2);
             break;
         case "3":
-            arrayOfInputs.push[3];
+            inputNumber(3);
             break;
         case "4":
-            arrayOfInputs.push[4];
+            inputNumber(4);
             break;
         case "5":
-            arrayOfInputs.push[5];
+            inputNumber(5);
             break;
         case "6":
-            arrayOfInputs.push[6];
+            inputNumber(6);
             break;
         case "7":
-            arrayOfInputs.push[7];
+            inputNumber(7);
             break;
         case "8":
-            arrayOfInputs.push[8];
+            inputNumber(8);
             break;
         case "9":
-            arrayOfInputs.push[9];
+            inputNumber(9);
             break;
         default:
             break;
     }
 });
+
+//function to add number on input
+function inputNumber(numberInput) {
+    let lastItem = arrayOfInputs[arrayOfInputs.length-1];
+    if (arrayOfInputs.length === 0) {
+        arrayOfInputs.push(parseFloat(numberInput));
+    } else if(typeof lastItem === "number" && lastItem.toString().length < 12){
+        arrayOfInputs.pop();
+        arrayOfInputs.push(parseFloat(lastItem.toString().concat(numberInput.toString())));
+    }
+    updateOnArrayChange();
+}
+
+function deleteLastInput() {
+    let lastItem = arrayOfInputs[arrayOfInputs.length-1];
+    if (arrayOfInputs.length === 0) {
+        return;
+    } else if (typeof lastItem === "number" && lastItem.toString().length === 1) {
+        arrayOfInputs.pop();
+        arrayOfInputs.push(0);
+    } else if (typeof lastItem === "string" && lastItem.toString().length === 1) {
+        arrayOfInputs.pop();
+    }else if(typeof lastItem === "number" && lastItem.toString().length > 1){
+        arrayOfInputs.pop();
+        arrayOfInputs.push(parseFloat(lastItem.toString().slice(0,lastItem.toString().length-1)));
+    } 
+    updateOnArrayChange();
+}

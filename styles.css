@@ -4,14 +4,14 @@ body{
     background-color: rgb(12, 12, 12);
     justify-content: center;
     align-items: center;
-    height: 85vh;
+    height: 95vh;
 }
 
 .calculator-body, .buttons{
     border-radius: 20px;
     display: flex;
     flex-direction: column;
-    width: 40vh;
+    width: 280px;
     
 }
 
@@ -44,7 +44,12 @@ body{
    
 }
 
+#display-text {
+    word-wrap: break-word;
+}
+
 #display-sub-text {
+    word-wrap: break-word;
     font-size: 21px;
     color: #9c9c9c;
 }
