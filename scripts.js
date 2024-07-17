@@ -46,7 +46,7 @@ function updateArrayChanges() {
 
 let buttons = document.querySelector(".buttons");
 
-buttons.addEventListener("click",(e)=>{
+buttons.addEventListener("click", (e) => {
     let button = e.target.id;
     switch (button) {
         case "all-clear":
@@ -69,8 +69,10 @@ buttons.addEventListener("click",(e)=>{
             inputOperator("-");
             break;
         case "equal-to":
+            equalTo();
             break;
         case "period":
+            inputOperator(".");
             break;
         case "0":
             inputNumber(0);
@@ -106,13 +108,29 @@ buttons.addEventListener("click",(e)=>{
             break;
     }
 });
-
+let operators = ["+","-","×","÷"];
 //function to add number on input
 function inputNumber(numberInput) {
-    let lastItem = arrayOfInputs[arrayOfInputs.length-1];
-    if (arrayOfInputs.length === 0 || typeof lastItem === "string") {
+    let lastItem = arrayOfInputs[arrayOfInputs.length - 1];
+    if (arrayOfInputs.length === 0) {
         arrayOfInputs.push(parseFloat(numberInput));
-    } else if(typeof lastItem === "number" && lastItem.toString().length < 12){
+    } else if (typeof lastItem === "string") {
+        if (lastItem === "No :)") {
+            arrayOfInputs.pop();
+            arrayOfInputs.push(parseFloat(numberInput));
+        } else if (lastItem.slice(-1) === ".") {
+            if (lastItem.length < 12) {
+                arrayOfInputs.pop();
+                arrayOfInputs.push(lastItem.concat(numberInput.toString()));
+            }
+        } else if (operators.includes(lastItem) === false) {
+            arrayOfInputs.pop();
+            arrayOfInputs.push(lastItem.concat(numberInput.toString()));
+        } else{
+            arrayOfInputs.push(numberInput);
+        }
+    }
+    else if (typeof lastItem === "number" && lastItem.toString().length < 12) {
         arrayOfInputs.pop();
         arrayOfInputs.push(parseFloat(lastItem.toString().concat(numberInput.toString())));
     }
@@ -120,31 +138,88 @@ function inputNumber(numberInput) {
 }
 
 function deleteLastInput() {
-    let lastItem = arrayOfInputs[arrayOfInputs.length-1];
+    let lastItem = arrayOfInputs[arrayOfInputs.length - 1];
     if (arrayOfInputs.length === 0) {
         return;
     } else if (typeof lastItem === "number" && lastItem.toString().length === 1) {
         arrayOfInputs.pop();
-        if(arrayOfInputs.length === 0)
-        arrayOfInputs.push(0);
+        if (arrayOfInputs.length === 0)
+            arrayOfInputs.push(0);
     } else if (typeof lastItem === "string") {
         arrayOfInputs.pop();
-    }else if(typeof lastItem === "number" && lastItem.toString().length > 1){
+    } else if (typeof lastItem === "number" && lastItem.toString().length > 1) {
         arrayOfInputs.pop();
-        arrayOfInputs.push(parseFloat(lastItem.toString().slice(0,lastItem.toString().length-1)));
-    } 
+        arrayOfInputs.push(parseFloat(lastItem.toString().slice(0, lastItem.toString().length - 1)));
+    }
     updateArrayChanges();
 }
 
 function inputOperator(operatorInput) {
-    let lastItem = arrayOfInputs[arrayOfInputs.length-1];
+    let lastItem = arrayOfInputs[arrayOfInputs.length - 1];
     if (arrayOfInputs.length === 0) {
         return;
-    } else if(typeof lastItem === "number" && arrayOfInputs.length === 1){
+    } else if (typeof lastItem === "number" && operatorInput === "." && lastItem.toString().length<12) {
+        arrayOfInputs.pop();
+        arrayOfInputs.push(lastItem.toString().concat(operatorInput));
+    }
+    else if (arrayOfInputs.length === 1) {
         arrayOfInputs.push(operatorInput);
-    } else if(arrayOfInputs.length === 2){
+    } else if (arrayOfInputs.length === 2 && operatorInput != ".") {
         arrayOfInputs.pop();
         arrayOfInputs.push(operatorInput);
     }
+    updateArrayChanges();
+}
+
+function equalTo() {
+    let arrayLength = arrayOfInputs.length;
+    if (arrayLength === 3) {
+        let firstNumber = parseFloat(arrayOfInputs[0]);
+        let secondNumber = parseFloat(arrayOfInputs[2]);
+        switch (arrayOfInputs[1]) {
+            case "+":
+                add(firstNumber, secondNumber);
+                break;
+            case "÷":
+                divide(firstNumber, secondNumber);
+                break;
+            case "-":
+                subtract(firstNumber, secondNumber);
+                break;
+            case "×":
+                multiply(firstNumber, secondNumber);
+                break;
+            default:
+                break;
+        }
+    }
+}
+
+function add(firstNumber, secondNumber) {
+    let result = firstNumber + secondNumber;
+    arrayOfInputs = [parseFloat(result.toFixed(6))];
+    updateArrayChanges();
+}
+
+function subtract(firstNumber, secondNumber) {
+    let result = firstNumber - secondNumber;
+    arrayOfInputs = [parseFloat(result.toFixed(6))];
+    updateArrayChanges();
+}
+
+function divide(firstNumber, secondNumber) {
+    if (secondNumber == 0) {
+        arrayOfInputs = ["No :)"];
+        updateArrayChanges();
+    } else {
+        let result = firstNumber / secondNumber;
+        arrayOfInputs = [parseFloat(result.toFixed(6))];
+        updateArrayChanges();
+    }
+}
+
+function multiply(firstNumber, secondNumber) {
+    let result = firstNumber * secondNumber;
+    arrayOfInputs = [parseFloat(result.toFixed(6))];
     updateArrayChanges();
 }

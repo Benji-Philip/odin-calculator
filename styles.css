@@ -45,10 +45,14 @@ body{
 }
 
 #display-text {
+    width: 260px;
+    text-align: right;
     word-wrap: break-word;
 }
 
 #display-sub-text {
+    width: 260px;
+    text-align: right;
     word-wrap: break-word;
     font-size: 21px;
     color: #9c9c9c;
