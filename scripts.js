@@ -145,11 +145,14 @@ function deleteLastInput() {
         arrayOfInputs.pop();
         if (arrayOfInputs.length === 0)
             arrayOfInputs.push(0);
-    } else if (typeof lastItem === "string") {
+    } else if (typeof lastItem === "string" && operators.includes(lastItem)) {
         arrayOfInputs.pop();
     } else if (typeof lastItem === "number" && lastItem.toString().length > 1) {
         arrayOfInputs.pop();
         arrayOfInputs.push(parseFloat(lastItem.toString().slice(0, lastItem.toString().length - 1)));
+    } else if(typeof lastItem === "string") {
+        arrayOfInputs.pop();
+        arrayOfInputs.push(lastItem.slice(0, lastItem.length - 1))
     }
     updateArrayChanges();
 }
