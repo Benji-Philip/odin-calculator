@@ -151,8 +151,12 @@ function deleteLastInput() {
         arrayOfInputs.pop();
         arrayOfInputs.push(parseFloat(lastItem.toString().slice(0, lastItem.toString().length - 1)));
     } else if(typeof lastItem === "string") {
-        arrayOfInputs.pop();
-        arrayOfInputs.push(lastItem.slice(0, lastItem.length - 1))
+        if (arrayOfInputs[0].length > 1) {
+            arrayOfInputs.pop();
+        arrayOfInputs.push(lastItem.slice(0, lastItem.length - 1));
+        } else
+        if (arrayOfInputs[0].length === 1)
+            arrayOfInputs = [0];
     }
     updateArrayChanges();
 }
@@ -165,11 +169,14 @@ function inputOperator(operatorInput) {
         arrayOfInputs.pop();
         arrayOfInputs.push(lastItem.toString().concat(operatorInput));
     }
-    else if (arrayOfInputs.length === 1) {
+    else if (arrayOfInputs.length === 1 && operatorInput != ".") {
         arrayOfInputs.push(operatorInput);
     } else if (arrayOfInputs.length === 2 && operatorInput != ".") {
         arrayOfInputs.pop();
         arrayOfInputs.push(operatorInput);
+    } else if(operatorInput === "." && lastItem.toString().includes(".") === false){
+        arrayOfInputs.pop();
+        arrayOfInputs.push(lastItem.toString().concat(operatorInput));
     }
     updateArrayChanges();
 }
